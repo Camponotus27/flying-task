@@ -18,7 +18,7 @@ jobs:
           KEY: ${{ secrets.SSHKEY }}
         with:
           source: '.'
-          target: '/home/limonayc/nodejsapp'
+          target: '/home/limonayc/nodejsapp/test-action'
 
       - name: Executing remote command
         uses: appleboy/ssh-action@master

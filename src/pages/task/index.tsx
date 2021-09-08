@@ -1,31 +1,51 @@
 import ListTask from '../../components/task/ListTask';
 import { useEffect, useState } from 'react';
 import { IListTaskProps, ITask } from './../../components/task/interfaces';
-import axios from 'axios';
+import { connect } from 'react-redux';
 import Layout from '../../components/layouts/Layout';
+import { IRootState } from './../../redux/store';
+import { fetchTaskAsync } from './../../components/task/SliceTask';
 
-const InitialState: ITask[] = [];
+interface pageTaskProps {
+	tasks: ITask[];
+	isLoading: boolean;
+	isError: boolean;
+	fetchTaskAsync(): null;
+}
 
-export default function PageTask() {
-	const [tasks, setTasks] = useState(InitialState);
-	const [isLoading, setIsLoading] = useState(true);
-	const [isError, setIsError] = useState(false);
+function PageTask({
+	tasks,
+	isLoading,
+	isError,
+	fetchTaskAsync,
+}: pageTaskProps) {
+	console.log(tasks);
+
 	useEffect(() => {
-		setIsLoading(true);
-		setIsError(false);
-		axios
-			.get(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/task`)
-			.then((res) => res.data.data)
-			.then((data) => {
-				setTasks(data.data);
-				setIsLoading(false);
-				setIsError(false);
-			})
-			.catch((err) => setIsError(true));
+		fetchTaskAsync();
 	}, []);
+
 	return (
 		<Layout>
 			<ListTask tasks={tasks} isLoading={isLoading} isError={isError} />
 		</Layout>
 	);
 }
+
+const mapStateToProps = (state: IRootState) => {
+	const taskState = state.tasks;
+
+	console.log(taskState);
+
+	return {
+		tasks: taskState.tasks,
+		isLoading: taskState.isLoading,
+		isError: taskState.isError,
+	};
+};
+
+const mapDispatchToProps = {
+	fetchTaskAsync,
+};
+const connector = connect(mapStateToProps, mapDispatchToProps);
+export default connector(PageTask);

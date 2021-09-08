@@ -14,7 +14,7 @@ function makeStore() {
 
 const store = makeStore();
 
-type AppState = ReturnType<typeof store.getState>;
+export type AppState = ReturnType<typeof store.getState>;
 
 export type AppThunk<ReturnType = void> = ThunkAction<
 	ReturnType,

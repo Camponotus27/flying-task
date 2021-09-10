@@ -1,26 +1,17 @@
 import ListTask from '../../components/task/ListTask';
-import { useEffect, useState } from 'react';
-import { IListTaskProps, ITask } from './../../components/task/interfaces';
-import { connect } from 'react-redux';
+import { useEffect } from 'react';
+import { ITask } from './../../components/task/interfaces';
+import { connect, ConnectedProps } from 'react-redux';
 import Layout from '../../components/layouts/Layout';
 import { IRootState } from './../../redux/store';
 import { fetchTaskAsync } from './../../components/task/SliceTask';
-
-interface pageTaskProps {
-	tasks: ITask[];
-	isLoading: boolean;
-	isError: boolean;
-	fetchTaskAsync(): null;
-}
 
 function PageTask({
 	tasks,
 	isLoading,
 	isError,
 	fetchTaskAsync,
-}: pageTaskProps) {
-	console.log(tasks);
-
+}: PropsFromRedux) {
 	useEffect(() => {
 		fetchTaskAsync();
 	}, []);
@@ -34,9 +25,6 @@ function PageTask({
 
 const mapStateToProps = (state: IRootState) => {
 	const taskState = state.tasks;
-
-	console.log(taskState);
-
 	return {
 		tasks: taskState.tasks,
 		isLoading: taskState.isLoading,
@@ -47,5 +35,7 @@ const mapStateToProps = (state: IRootState) => {
 const mapDispatchToProps = {
 	fetchTaskAsync,
 };
-const connector = connect(mapStateToProps, mapDispatchToProps);
-export default connector(PageTask);
+
+const conn = connect(mapStateToProps, mapDispatchToProps);
+type PropsFromRedux = ConnectedProps<typeof conn>;
+export default conn(PageTask);

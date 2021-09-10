@@ -4,6 +4,7 @@ import Grid from '@material-ui/core/Grid';
 import {
 	DefaultMessageErrorListTask,
 	DefaultMessageLoadingListTask,
+	DefaultMessageEmptyListTask,
 } from './constans';
 import { IListTaskProps } from './interfaces';
 
@@ -25,6 +26,10 @@ export default function ListTask({
 				<h1>{DefaultMessageErrorListTask}</h1>
 			</Grid>
 		);
+	} else if (!tasks) {
+		<Grid item xs={3}>
+			<h1>{DefaultMessageEmptyListTask}</h1>
+		</Grid>;
 	} else {
 		body = tasks.map((task) => {
 			return (

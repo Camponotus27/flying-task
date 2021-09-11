@@ -1,10 +1,11 @@
 import ListTask from '../../components/task/ListTask';
 import { useEffect } from 'react';
-import { ITask } from './../../components/task/interfaces';
 import { connect, ConnectedProps } from 'react-redux';
 import Layout from '../../components/layouts/Layout';
 import { IRootState } from './../../redux/store';
 import { fetchTaskAsync } from './../../components/task/SliceTask';
+import Button from '@material-ui/core/Button';
+import { useRouter } from 'next/router';
 
 function PageTask({
 	tasks,
@@ -12,12 +13,21 @@ function PageTask({
 	isError,
 	fetchTaskAsync,
 }: PropsFromRedux) {
+	const router = useRouter();
+
 	useEffect(() => {
 		fetchTaskAsync();
 	}, []);
 
+	const handleClick = () => {
+		router.push('task/create');
+	};
+
 	return (
 		<Layout>
+			<Button variant="contained" color="primary" onClick={handleClick}>
+				Crear
+			</Button>
 			<ListTask tasks={tasks} isLoading={isLoading} isError={isError} />
 		</Layout>
 	);
@@ -25,10 +35,12 @@ function PageTask({
 
 const mapStateToProps = (state: IRootState) => {
 	const taskState = state.tasks;
+
+	const { isLoading, isError } = taskState.feching;
 	return {
 		tasks: taskState.tasks,
-		isLoading: taskState.isLoading,
-		isError: taskState.isError,
+		isLoading,
+		isError,
 	};
 };
 

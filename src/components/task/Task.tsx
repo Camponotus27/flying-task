@@ -20,6 +20,8 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
+import StyledMenu from './StyledMenu';
+
 interface Props {
 	task: ITask;
 }
@@ -52,10 +54,13 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Task({ task }: Props) {
 	const classes = useStyles();
 	const [expanded, setExpanded] = useState(false);
+	const [openMenu, setOpenMenu] = useState(false);
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
 	};
+
+	const handleMenuSetting = () => {};
 
 	return (
 		<Card className={classes.root}>
@@ -66,8 +71,9 @@ export default function Task({ task }: Props) {
 					</Avatar>
 				}
 				action={
-					<IconButton aria-label="settings">
+					<IconButton onClick={handleMenuSetting} aria-label="settings">
 						<MoreVertIcon />
+						{openMenu && <StyledMenu></StyledMenu>}
 					</IconButton>
 				}
 				title={task.title}

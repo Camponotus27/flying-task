@@ -1,25 +1,56 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import type { AppState, AppThunk } from '../../redux/store';
-import { fetchTasks } from './../../infrastructure/http/repository/flying-task/TaskRepositoy';
+import {
+	fetchTasks,
+	createTask,
+} from './../../infrastructure/http/repository/flying-task/TaskRepositoy';
 import { ITask } from '.';
 
 export interface ITaskState {
 	tasks: ITask[];
-	isLoading: boolean;
-	isError: boolean;
+	feching: {
+		isLoading: boolean;
+		isError: boolean;
+	};
+	creating: {
+		isLoading: boolean;
+		isError: boolean;
+	};
+	deleting: {
+		isLoading: boolean;
+		isError: boolean;
+	};
 }
 
 const initialState: ITaskState = {
 	tasks: [],
-	isLoading: false,
-	isError: false,
+	feching: {
+		isLoading: false,
+		isError: false,
+	},
+	creating: {
+		isLoading: false,
+		isError: false,
+	},
+	deleting: {
+		isLoading: false,
+		isError: false,
+	},
 };
 
 export const fetchTaskAsync = createAsyncThunk('tasks/fetchTasks', async () => {
 	const response = await fetchTasks();
 	return response.data;
 });
+
+export const createTaskAsync = createAsyncThunk(
+	'tasks/createTask',
+	async (task: ITask) => {
+		const response = await createTask(task);
+		return response.data;
+	}
+);
 
 export const taskSlice = createSlice({
 	name: 'task',
@@ -33,22 +64,45 @@ export const taskSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(fetchTaskAsync.pending, (state) => {
-				console.log('pending');
-				state.isError = false;
-				state.isLoading = true;
+				state.feching = {
+					isError: false,
+					isLoading: true,
+				};
 			})
 			.addCase(fetchTaskAsync.fulfilled, (state, action) => {
-				console.log('fulfilled', fetchTaskAsync.rejected);
-				state.isLoading = false;
-				state.isError = false;
+				state.feching = {
+					isError: false,
+					isLoading: false,
+				};
 				state.tasks = action.payload;
 			})
 			.addCase(fetchTaskAsync.rejected, (state, action) => {
-				console.log('fetchTaskAsync.rejected', action);
-				state.isLoading = false;
-				state.isError = true;
+				state.feching = {
+					isError: true,
+					isLoading: false,
+				};
 				state.tasks = [];
-				console.log('fulfilled');
+			})
+
+			.addCase(createTaskAsync.pending, (state) => {
+				state.creating = {
+					isError: false,
+					isLoading: true,
+				};
+			})
+			.addCase(createTaskAsync.fulfilled, (state, action) => {
+				state.creating = {
+					isError: false,
+					isLoading: false,
+				};
+				state.tasks = [...state.tasks, action.payload];
+			})
+			.addCase(createTaskAsync.rejected, (state, action) => {
+				state.creating = {
+					isError: true,
+					isLoading: false,
+				};
+				state.tasks = [];
 			});
 	},
 });

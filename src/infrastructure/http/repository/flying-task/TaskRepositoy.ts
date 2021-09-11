@@ -7,3 +7,11 @@ export async function fetchTasks(): Promise<{ data: ITask[] }> {
 	);
 	return res.data.data;
 }
+
+export async function createTask(task: ITask): Promise<{ data: ITask }> {
+	const res = await axios.post(
+		`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/task`,
+		task
+	);
+	return res.data.data;
+}

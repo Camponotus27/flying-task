@@ -1,6 +1,6 @@
 import styles from './styles.module.css';
 import { ITask } from './interfaces';
-import { useState } from 'react';
+import { useState, MouseEvent } from 'react';
 import clsx from 'clsx';
 
 // material UI
@@ -20,11 +20,48 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
-import StyledMenu from './StyledMenu';
+import { withStyles } from '@material-ui/core/styles';
+import Menu, { MenuProps } from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemText from '@material-ui/core/ListItemText';
+import DeleteIcon from '@material-ui/icons/Delete';
+import EditIcon from '@material-ui/icons/Edit';
 
 interface Props {
 	task: ITask;
 }
+
+const StyledMenu = withStyles({
+	paper: {
+		border: '1px solid #d3d4d5',
+	},
+})((props: MenuProps) => (
+	<Menu
+		elevation={0}
+		getContentAnchorEl={null}
+		anchorOrigin={{
+			vertical: 'bottom',
+			horizontal: 'center',
+		}}
+		transformOrigin={{
+			vertical: 'top',
+			horizontal: 'center',
+		}}
+		{...props}
+	/>
+));
+
+const StyledMenuItem = withStyles((theme) => ({
+	root: {
+		'&:focus': {
+			backgroundColor: theme.palette.primary.main,
+			'& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+				color: theme.palette.common.white,
+			},
+		},
+	},
+}))(MenuItem);
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
@@ -54,14 +91,20 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function Task({ task }: Props) {
 	const classes = useStyles();
 	const [expanded, setExpanded] = useState(false);
-	const [openMenu, setOpenMenu] = useState(false);
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
 	};
 
-	const handleMenuSetting = () => {};
+	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
+	const handleMenuSetting = (event: MouseEvent<HTMLElement>) => {
+		setAnchorEl(event.currentTarget);
+	};
+
+	const handleClose = () => {
+		setAnchorEl(null);
+	};
 	return (
 		<Card className={classes.root}>
 			<CardHeader
@@ -71,14 +114,38 @@ export default function Task({ task }: Props) {
 					</Avatar>
 				}
 				action={
-					<IconButton onClick={handleMenuSetting} aria-label="settings">
+					<IconButton
+						onClick={handleMenuSetting}
+						aria-label="settings"
+						aria-controls="customized-menu"
+						aria-haspopup="true"
+					>
 						<MoreVertIcon />
-						{openMenu && <StyledMenu></StyledMenu>}
 					</IconButton>
 				}
 				title={task.title}
 				subheader="fecha?"
 			/>
+			<StyledMenu
+				id="customized-menu"
+				anchorEl={anchorEl}
+				keepMounted
+				open={Boolean(anchorEl)}
+				onClose={handleClose}
+			>
+				<StyledMenuItem>
+					<ListItemIcon>
+						<EditIcon fontSize="small" />
+					</ListItemIcon>
+					<ListItemText primary="Edit" />
+				</StyledMenuItem>
+				<StyledMenuItem>
+					<ListItemIcon>
+						<DeleteIcon fontSize="small" />
+					</ListItemIcon>
+					<ListItemText primary="Delete" />
+				</StyledMenuItem>
+			</StyledMenu>
 			<CardContent>
 				<Typography variant="body2" color="textSecondary" component="p">
 					{task.body}

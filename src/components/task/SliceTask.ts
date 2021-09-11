@@ -17,6 +17,10 @@ export interface ITaskState {
 		isLoading: boolean;
 		isError: boolean;
 	};
+	deleting: {
+		isLoading: boolean;
+		isError: boolean;
+	};
 }
 
 const initialState: ITaskState = {
@@ -26,6 +30,10 @@ const initialState: ITaskState = {
 		isError: false,
 	},
 	creating: {
+		isLoading: false,
+		isError: false,
+	},
+	deleting: {
 		isLoading: false,
 		isError: false,
 	},

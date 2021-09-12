@@ -1,14 +1,21 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import type { AppState, AppThunk } from '../../redux/store';
+import type { AppState, AppThunk } from '../../../redux/store';
 import {
 	fetchTasks,
 	createTask,
-} from './../../infrastructure/http/repository/flying-task/TaskRepositoy';
-import { ITask } from '.';
+	deleteTask,
+} from '../../../infrastructure/http/repository/flying-task/TaskRepositoy';
+import TaskModel from '../../../domain/TaskModel';
+
+export interface deletingState {
+	idTask: number;
+	isLoading: boolean;
+	isError: boolean;
+}
 
 export interface ITaskState {
-	tasks: ITask[];
+	tasks: TaskModel[];
 	feching: {
 		isLoading: boolean;
 		isError: boolean;
@@ -17,10 +24,7 @@ export interface ITaskState {
 		isLoading: boolean;
 		isError: boolean;
 	};
-	deleting: {
-		isLoading: boolean;
-		isError: boolean;
-	};
+	deleting: deletingState;
 }
 
 const initialState: ITaskState = {
@@ -34,21 +38,30 @@ const initialState: ITaskState = {
 		isError: false,
 	},
 	deleting: {
+		idTask: 0,
 		isLoading: false,
 		isError: false,
 	},
 };
 
-export const fetchTaskAsync = createAsyncThunk('tasks/fetchTasks', async () => {
-	const response = await fetchTasks();
-	return response.data;
-});
+export const fetchTaskAsync = createAsyncThunk(
+	'tasks/fetchTasks',
+	async (): Promise<TaskModel[]> => await fetchTasks()
+);
 
 export const createTaskAsync = createAsyncThunk(
 	'tasks/createTask',
-	async (task: ITask) => {
-		const response = await createTask(task);
-		return response.data;
+	async (task: TaskModel): Promise<TaskModel> => await createTask(task)
+);
+
+export const deleteTaskAsync = createAsyncThunk(
+	'tasks/deleteTask',
+	async (idTask: number): Promise<number> => {
+		await deleteTask(idTask);
+
+		return new Promise((resolve, reject) => {
+			resolve(idTask);
+		});
 	}
 );
 
@@ -103,6 +116,30 @@ export const taskSlice = createSlice({
 					isLoading: false,
 				};
 				state.tasks = [];
+			})
+			.addCase(deleteTaskAsync.pending, (state, action) => {
+				console.log('deleteTaskAsync.pending', action.payload);
+				state.deleting = {
+					idTask: state.deleting.idTask,
+					isError: false,
+					isLoading: true,
+				};
+			})
+			.addCase(deleteTaskAsync.fulfilled, (state, action) => {
+				const idDeletedTask = action.payload;
+				state.deleting = {
+					idTask: 0,
+					isError: false,
+					isLoading: false,
+				};
+				state.tasks = state.tasks.filter((task) => task.id !== idDeletedTask);
+			})
+			.addCase(deleteTaskAsync.rejected, (state, action) => {
+				state.deleting = {
+					idTask: 0,
+					isError: true,
+					isLoading: false,
+				};
 			});
 	},
 });

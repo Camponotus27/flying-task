@@ -2,15 +2,15 @@ import { useFormik, FormikProvider } from 'formik';
 import * as yup from 'yup';
 import { connect, ConnectedProps } from 'react-redux';
 import Button from '@material-ui/core/Button';
-import Layout from './../../../components/layouts/Layout';
+import Layout from '../../../application/components/layouts/Layout';
 import TextField from '@material-ui/core/TextField';
-import TinyMCE from '../../../components/common/text-editor-component/TinyMCE';
+import TinyMCE from '../../../application/components/common/text-editor-component/TinyMCE';
 import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
 import { IRootState } from './../../../redux/store';
-import { createTaskAsync } from './../../../components/task/SliceTask';
-import { ITask } from './../../../components/task/interfaces';
-import NoSSRWrapper from './../../../components/common/NoSSRWrapper';
+import { createTaskAsync } from '../../../application/components/task/SliceTask';
+import TaskModel from '../../../domain/TaskModel';
+import NoSSRWrapper from '../../../application/components/common/NoSSRWrapper';
 
 const validationSchema = yup.object({
 	title: yup.string(),
@@ -31,7 +31,7 @@ function Create({ isError, isLoading, createTaskAsync }: PropsFromRedux) {
 		},
 		validationSchema: validationSchema,
 		onSubmit: (values) => {
-			const task: ITask = { title: values.title, body: values.body };
+			const task: TaskModel = { title: values.title, body: values.body };
 			createTaskAsync(task);
 		},
 	});

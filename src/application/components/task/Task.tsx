@@ -1,5 +1,5 @@
 import styles from './styles.module.css';
-import { ITask } from './interfaces';
+import TaskModel from '../../../domain/TaskModel';
 import { useState, MouseEvent } from 'react';
 import clsx from 'clsx';
 
@@ -7,7 +7,6 @@ import clsx from 'clsx';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
 import Collapse from '@material-ui/core/Collapse';
@@ -29,7 +28,9 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 
 interface Props {
-	task: ITask;
+	task: TaskModel;
+	deleteTaskAsync(idTask: number): any;
+	isDeleting: boolean;
 }
 
 const StyledMenu = withStyles({
@@ -88,9 +89,10 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-export default function Task({ task }: Props) {
+export default function Task({ task, deleteTaskAsync, isDeleting }: Props) {
 	const classes = useStyles();
 	const [expanded, setExpanded] = useState(false);
+	const [confirmDelete, setConfirmDelete] = useState(false);
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
@@ -102,8 +104,27 @@ export default function Task({ task }: Props) {
 		setAnchorEl(event.currentTarget);
 	};
 
+	const handlerClickDelete = () => {
+		if (confirmDelete) {
+			deleteTask();
+		} else {
+			setConfirmDelete(true);
+		}
+	};
+
+	const deleteTask = () => {
+		if (!task.id) {
+			//TODO: Crear notificacion  y mandar este err
+			console.log('La task no tiene id', task);
+		} else {
+			handleClose();
+			deleteTaskAsync(task.id);
+		}
+	};
+
 	const handleClose = () => {
 		setAnchorEl(null);
+		setConfirmDelete(false);
 	};
 	return (
 		<Card className={classes.root}>
@@ -114,14 +135,18 @@ export default function Task({ task }: Props) {
 					</Avatar>
 				}
 				action={
-					<IconButton
-						onClick={handleMenuSetting}
-						aria-label="settings"
-						aria-controls="customized-menu"
-						aria-haspopup="true"
-					>
-						<MoreVertIcon />
-					</IconButton>
+					isDeleting ? (
+						<div />
+					) : (
+						<IconButton
+							onClick={handleMenuSetting}
+							aria-label="settings"
+							aria-controls="customized-menu"
+							aria-haspopup="true"
+						>
+							<MoreVertIcon />
+						</IconButton>
+					)
 				}
 				title={task.title}
 				subheader="fecha?"
@@ -137,13 +162,24 @@ export default function Task({ task }: Props) {
 					<ListItemIcon>
 						<EditIcon fontSize="small" />
 					</ListItemIcon>
-					<ListItemText primary="Edit" />
+					<ListItemText primary="Editar" />
 				</StyledMenuItem>
-				<StyledMenuItem>
-					<ListItemIcon>
-						<DeleteIcon fontSize="small" />
-					</ListItemIcon>
-					<ListItemText primary="Delete" />
+				<StyledMenuItem onClick={handlerClickDelete}>
+					{confirmDelete ? (
+						<>
+							<ListItemIcon>
+								<DeleteIcon fontSize="small" />
+							</ListItemIcon>
+							<ListItemText primary="Seguro?" />
+						</>
+					) : (
+						<>
+							<ListItemIcon>
+								<DeleteIcon fontSize="small" />
+							</ListItemIcon>
+							<ListItemText primary="Eliminar" />
+						</>
+					)}
 				</StyledMenuItem>
 			</StyledMenu>
 			<CardContent>

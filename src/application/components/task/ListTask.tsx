@@ -12,8 +12,14 @@ export default function ListTask({
 	tasks,
 	isLoading = false,
 	isError = false,
+	deleteTaskAsync,
+	deletingState,
 }: IListTaskProps) {
-	let body;
+	let body: JSX.Element | JSX.Element[] = (
+		<Grid item xs={3}>
+			<h1>{DefaultMessageEmptyListTask}</h1>
+		</Grid>
+	);
 	if (isLoading) {
 		body = (
 			<Grid item xs={3}>
@@ -26,15 +32,15 @@ export default function ListTask({
 				<h1>{DefaultMessageErrorListTask}</h1>
 			</Grid>
 		);
-	} else if (!tasks) {
-		<Grid item xs={3}>
-			<h1>{DefaultMessageEmptyListTask}</h1>
-		</Grid>;
-	} else {
+	} else if (tasks.length > 0) {
 		body = tasks.map((task) => {
 			return (
 				<Grid key={task.id} item xs={3}>
-					<Task task={task}></Task>
+					<Task
+						task={task}
+						deleteTaskAsync={deleteTaskAsync}
+						isDeleting={deletingState.idTask == task.id}
+					></Task>
 				</Grid>
 			);
 		});

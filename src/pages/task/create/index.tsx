@@ -85,7 +85,7 @@ function Create({
 		);
 
 	return (
-		<Layout display="flex">
+		<Layout>
 			<Typography variant="h2" align="center">
 				{task ? 'Update una nota' : 'Crea una nota'}
 			</Typography>

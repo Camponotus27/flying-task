@@ -6,7 +6,9 @@ import { IRootState } from './../../redux/store';
 import {
 	fetchTaskAsync,
 	deleteTaskAsync,
+	setTaskEdit,
 } from '../../application/components/task/SliceTask';
+
 import Button from '@material-ui/core/Button';
 import { useRouter } from 'next/router';
 
@@ -17,6 +19,7 @@ function PageTask({
 	fetchTaskAsync,
 	deletingState,
 	deleteTaskAsync,
+	setTaskEdit,
 }: PropsFromRedux) {
 	const router = useRouter();
 
@@ -25,6 +28,7 @@ function PageTask({
 	}, []);
 
 	const handleCreateClick = () => {
+		setTaskEdit(undefined);
 		router.push('task/create');
 	};
 
@@ -32,7 +36,12 @@ function PageTask({
 
 	return (
 		<Layout>
-			<Button variant="contained" color="primary" onClick={handleCreateClick}>
+			<Button
+				variant="contained"
+				color="primary"
+				onClick={handleCreateClick}
+				style={{ margin: 20 }}
+			>
 				Crear
 			</Button>
 			<ListTask
@@ -41,6 +50,7 @@ function PageTask({
 				isError={isError}
 				deleteTaskAsync={deleteTaskAsync}
 				deletingState={deletingState}
+				setTaskEdit={setTaskEdit}
 			/>
 		</Layout>
 	);
@@ -60,6 +70,7 @@ const mapStateToProps = (state: IRootState) => {
 };
 
 const mapDispatchToProps = {
+	setTaskEdit,
 	fetchTaskAsync,
 	deleteTaskAsync,
 };

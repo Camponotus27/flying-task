@@ -26,11 +26,12 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-
+import { useRouter } from 'next/router';
 interface Props {
 	task: TaskModel;
-	deleteTaskAsync(idTask: number): any;
+	deleteTaskAsync(idTask: number): void;
 	isDeleting: boolean;
+	setTaskEdit(task: TaskModel): void;
 }
 
 const StyledMenu = withStyles({
@@ -66,9 +67,7 @@ const StyledMenuItem = withStyles((theme) => ({
 
 const useStyles = makeStyles((theme: Theme) =>
 	createStyles({
-		root: {
-			maxWidth: 345,
-		},
+		root: {},
 		media: {
 			height: 0,
 			paddingTop: '56.25%', // 16:9
@@ -89,14 +88,22 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-export default function Task({ task, deleteTaskAsync, isDeleting }: Props) {
+export default function Task({
+	task,
+	deleteTaskAsync,
+	isDeleting,
+	setTaskEdit,
+}: Props) {
 	const classes = useStyles();
 	const [expanded, setExpanded] = useState(false);
 	const [confirmDelete, setConfirmDelete] = useState(false);
+	const router = useRouter();
 
 	const handleExpandClick = () => {
 		setExpanded(!expanded);
 	};
+
+	const actionFeature = false;
 
 	const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -120,6 +127,11 @@ export default function Task({ task, deleteTaskAsync, isDeleting }: Props) {
 			handleClose();
 			deleteTaskAsync(task.id);
 		}
+	};
+
+	const handlerClickEdit = () => {
+		setTaskEdit(task);
+		router.push('task/create');
 	};
 
 	const handleClose = () => {
@@ -158,7 +170,7 @@ export default function Task({ task, deleteTaskAsync, isDeleting }: Props) {
 				open={Boolean(anchorEl)}
 				onClose={handleClose}
 			>
-				<StyledMenuItem>
+				<StyledMenuItem onClick={handlerClickEdit}>
 					<ListItemIcon>
 						<EditIcon fontSize="small" />
 					</ListItemIcon>
@@ -183,35 +195,37 @@ export default function Task({ task, deleteTaskAsync, isDeleting }: Props) {
 				</StyledMenuItem>
 			</StyledMenu>
 			<CardContent>
-				<Typography variant="body2" color="textSecondary" component="p">
-					{task.body}
-				</Typography>
+				<div dangerouslySetInnerHTML={{ __html: task.body }} />
 			</CardContent>
-			<CardActions disableSpacing>
-				<IconButton aria-label="add to favorites">
-					<FavoriteIcon />
-				</IconButton>
-				<IconButton aria-label="share">
-					<ShareIcon />
-				</IconButton>
-				<IconButton
-					className={clsx(classes.expand, {
-						[classes.expandOpen]: expanded,
-					})}
-					onClick={handleExpandClick}
-					aria-expanded={expanded}
-					aria-label="show more"
-				>
-					<ExpandMoreIcon />
-				</IconButton>
-			</CardActions>
-			<Collapse in={expanded} timeout="auto" unmountOnExit>
-				<CardContent>
-					<Typography paragraph>Comentarios:</Typography>
-					<Typography paragraph>Comentario</Typography>
-					<Typography paragraph>Comentario 2</Typography>
-				</CardContent>
-			</Collapse>
+			{actionFeature && (
+				<CardActions disableSpacing>
+					<IconButton aria-label="add to favorites">
+						<FavoriteIcon />
+					</IconButton>
+					<IconButton aria-label="share">
+						<ShareIcon />
+					</IconButton>
+					<IconButton
+						className={clsx(classes.expand, {
+							[classes.expandOpen]: expanded,
+						})}
+						onClick={handleExpandClick}
+						aria-expanded={expanded}
+						aria-label="show more"
+					>
+						<ExpandMoreIcon />
+					</IconButton>
+				</CardActions>
+			)}
+			{actionFeature && (
+				<Collapse in={expanded} timeout="auto" unmountOnExit>
+					<CardContent>
+						<Typography paragraph>Comentarios:</Typography>
+						<Typography paragraph>Comentario</Typography>
+						<Typography paragraph>Comentario 2</Typography>
+					</CardContent>
+				</Collapse>
+			)}
 		</Card>
 	);
 }

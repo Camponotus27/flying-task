@@ -8,31 +8,51 @@ import TinyMCE from '../../../application/components/common/text-editor-componen
 import Typography from '@material-ui/core/Typography';
 import { useRouter } from 'next/router';
 import { IRootState } from './../../../redux/store';
-import { createTaskAsync } from '../../../application/components/task/SliceTask';
-import TaskModel from '../../../domain/TaskModel';
+import {
+	createTaskAsync,
+	updateTaskAsync,
+} from '../../../application/components/task/SliceTask';
 import NoSSRWrapper from '../../../application/components/common/NoSSRWrapper';
+import TaskModel from '../../../domain/TaskModel';
 
 const validationSchema = yup.object({
 	title: yup.string(),
 	body: yup.string(),
 });
 
-function Create({ isError, isLoading, createTaskAsync }: PropsFromRedux) {
+function Create({
+	isError,
+	isLoading,
+	task,
+	createTaskAsync,
+	updateTaskAsync,
+}: PropsFromRedux) {
 	const router = useRouter();
-
 	const handleNotasClick = () => {
 		router.push('/');
 	};
 
+	const initialValues = task || {
+		title: '',
+		body: '',
+	};
+
 	const formik = useFormik({
-		initialValues: {
-			title: '',
-			body: '',
-		},
+		initialValues,
 		validationSchema: validationSchema,
 		onSubmit: (values) => {
-			const task: TaskModel = { title: values.title, body: values.body };
-			createTaskAsync(task);
+			if (task) {
+				updateTaskAsync({
+					id: task.id,
+					title: values.title,
+					body: values.body,
+				});
+			} else {
+				createTaskAsync({
+					title: values.title,
+					body: values.body,
+				});
+			}
 		},
 	});
 
@@ -65,9 +85,9 @@ function Create({ isError, isLoading, createTaskAsync }: PropsFromRedux) {
 		);
 
 	return (
-		<Layout>
+		<Layout display="flex">
 			<Typography variant="h2" align="center">
-				Crea una nota
+				{task ? 'Update una nota' : 'Crea una nota'}
 			</Typography>
 			<Button variant="contained" color="primary" onClick={handleNotasClick}>
 				Notas
@@ -79,16 +99,18 @@ function Create({ isError, isLoading, createTaskAsync }: PropsFromRedux) {
 
 const mapStateToProps = (state: IRootState) => {
 	const taskState = state.tasks;
-	const { isLoading, isError } = taskState.creating;
+	const { isLoading, isError, task } = taskState.creating;
 
 	return {
 		isLoading,
 		isError,
+		task,
 	};
 };
 
 const mapDispatchToProps = {
 	createTaskAsync,
+	updateTaskAsync,
 };
 
 const conn = connect(mapStateToProps, mapDispatchToProps);

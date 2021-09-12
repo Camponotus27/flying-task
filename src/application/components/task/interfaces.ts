@@ -5,6 +5,7 @@ export interface IListTaskProps {
 	tasks: TaskModel[];
 	isLoading?: boolean;
 	isError?: boolean;
-	deleteTaskAsync(idTask: number): any;
+	deleteTaskAsync(idTask: number): void;
 	deletingState: deletingState;
+	setTaskEdit(task: TaskModel): void;
 }

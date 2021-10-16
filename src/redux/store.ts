@@ -2,15 +2,19 @@ import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit';
 
 import tasksReducer, {
 	ITaskState,
-} from '../application/components/task/SliceTask';
+} from './../application/components/task/SliceTask';
+import loginReducer, {
+	ILogingState,
+} from './../application/components/login/SliceLogin';
 
 export interface IRootState {
 	tasks: ITaskState;
+	login: ILogingState;
 }
 
 function makeStore() {
 	return configureStore({
-		reducer: { tasks: tasksReducer },
+		reducer: { tasks: tasksReducer, login: loginReducer },
 	});
 }
 

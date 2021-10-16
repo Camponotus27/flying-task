@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme: Theme) =>
 	})
 );
 
-export default function Task({
+export default function ItemTask({
 	task,
 	deleteTaskAsync,
 	isDeleting,

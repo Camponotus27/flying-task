@@ -1,12 +1,32 @@
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { connect, ConnectedProps } from 'react-redux';
+import { IRootState } from './../redux/store';
+
 import Layout from '../application/components/layouts/Layout';
+import SectionReduxTask from './../application/components/task/SectionReduxTask';
+import SectionGoogleReduxLogin from './../application/components/login/SectionGoogleReduxLogin';
 
-export default function Home() {
-	const router = useRouter();
+function Home({ login }: PropsFromRedux) {
+	return (
+		<Layout>
+			{!login && <SectionGoogleReduxLogin />}
 
-	useEffect(() => {
-		router.push('/task');
-	}, []);
-	return <Layout>Hola</Layout>;
+			<SectionReduxTask />
+		</Layout>
+	);
 }
+
+const mapStateToProps = (state: IRootState) => {
+	const logingState = state.login;
+
+	const { login } = logingState;
+
+	return {
+		login,
+	};
+};
+
+const mapDispatchToProps = {};
+
+const conn = connect(mapStateToProps, mapDispatchToProps);
+export type PropsFromRedux = ConnectedProps<typeof conn>;
+export default conn(Home);

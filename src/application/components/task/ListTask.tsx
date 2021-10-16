@@ -1,4 +1,4 @@
-import Task from './Task';
+import ItemTask from './ItemTask';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import {
@@ -37,12 +37,12 @@ export default function ListTask({
 		body = tasks.map((task) => {
 			return (
 				<Grid key={task.id} item xs={12} sm={6} md={4} lg={3}>
-					<Task
+					<ItemTask
 						task={task}
 						deleteTaskAsync={deleteTaskAsync}
 						isDeleting={deletingState.idTask == task.id}
 						setTaskEdit={setTaskEdit}
-					></Task>
+					></ItemTask>
 				</Grid>
 			);
 		});

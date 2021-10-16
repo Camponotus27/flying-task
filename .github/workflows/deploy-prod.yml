@@ -3,6 +3,7 @@ name: Deploy Prod
 on:
   push:
     branches: [main]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -32,13 +33,4 @@ jobs:
           KEY: ${{ secrets.SSHKEY }}
         with:
           source: '.'
-          target: '/home/limonayc/nodejsapp/flying-task'
-
-      - name: Executing remote command
-        uses: appleboy/ssh-action@master
-        with:
-          host: ${{ secrets.HOST }}
-          USERNAME: ${{ secrets.USERNAME }}
-          PORT: ${{ secrets.PORT }}
-          KEY: ${{ secrets.SSHKEY }}
-          script: ls
+          target: '/var/www/flying-task.sebacz.com'

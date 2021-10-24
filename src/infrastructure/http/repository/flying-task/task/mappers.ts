@@ -1,4 +1,4 @@
-import TaskModel from '../../../../domain/TaskModel';
+import TaskModel from '../../../../../domain/TaskModel';
 import { ITaskEntity } from './interfaces';
 
 export function mapTaskModelToITaskEntity(task: TaskModel): ITaskEntity {

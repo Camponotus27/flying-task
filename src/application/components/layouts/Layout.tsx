@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import Footer from './footers/Footer';
-import Container from '@material-ui/core/Container';
-import Box from '@material-ui/core/Box';
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
 
 interface Props {
 	children: ReactNode;
@@ -11,7 +11,7 @@ export default function Layout({ children }: Props) {
 	return (
 		<Container>
 			<main>
-				<Box gridGap={20} display="flex" flexDirection="column">
+				<Box gap={2} display="flex" flexDirection="column">
 					{children}
 				</Box>
 			</main>

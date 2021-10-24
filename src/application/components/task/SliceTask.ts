@@ -6,7 +6,7 @@ import {
 	createTask,
 	updateTask,
 	deleteTask,
-} from '../../../infrastructure/http/repository/flying-task/TaskRepositoy';
+} from '../../../infrastructure/http/repository/flying-task/task/TaskRepositoy';
 import TaskModel from '../../../domain/TaskModel';
 
 export interface deletingState {

@@ -1,5 +1,4 @@
 import WordModel from '../../../domain/WordModel';
-import { deletingState } from './SliceWord';
 
 export interface IListWordProps {
 	words: WordModel[];

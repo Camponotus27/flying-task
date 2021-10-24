@@ -4,13 +4,21 @@ import tasksReducer, {
 	ITaskState,
 } from '../application/components/task/SliceTask';
 
+import englishDictionaryReducer, {
+	IWordState,
+} from '../application/components/english-dictionary/SliceWord';
+
 export interface IRootState {
 	tasks: ITaskState;
+	dictionaryReducer: IWordState;
 }
 
 function makeStore() {
 	return configureStore({
-		reducer: { tasks: tasksReducer },
+		reducer: {
+			tasks: tasksReducer,
+			dictionaryReducer: englishDictionaryReducer,
+		},
 	});
 }
 

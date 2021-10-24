@@ -4,7 +4,7 @@ import {
 	mapTaskEntityListToTaskModelList,
 	mapTaskEntityToTaskModel,
 } from './mappers';
-import TaskModel from '../../../../domain/TaskModel';
+import TaskModel from '../../../../../domain/TaskModel';
 export async function fetchTasks(): Promise<TaskModel[]> {
 	const res = await axios.get<IResponseList>(
 		`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/task`

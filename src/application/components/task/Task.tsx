@@ -4,28 +4,30 @@ import { useState, MouseEvent } from 'react';
 import clsx from 'clsx';
 
 // material UI
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
-import { red } from '@material-ui/core/colors';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import { Theme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import createStyles from '@mui/styles/createStyles';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Collapse from '@mui/material/Collapse';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import { red } from '@mui/material/colors';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import ShareIcon from '@mui/icons-material/Share';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
-import { withStyles } from '@material-ui/core/styles';
-import Menu, { MenuProps } from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import DeleteIcon from '@material-ui/icons/Delete';
-import EditIcon from '@material-ui/icons/Edit';
+import withStyles from '@mui/styles/withStyles';
+import Menu, { MenuProps } from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import { useRouter } from 'next/router';
 interface Props {
 	task: TaskModel;
@@ -41,7 +43,7 @@ const StyledMenu = withStyles({
 })((props: MenuProps) => (
 	<Menu
 		elevation={0}
-		getContentAnchorEl={null}
+		//getContentAnchorEl={null}
 		anchorOrigin={{
 			vertical: 'bottom',
 			horizontal: 'center',
@@ -57,9 +59,9 @@ const StyledMenu = withStyles({
 const StyledMenuItem = withStyles((theme) => ({
 	root: {
 		'&:focus': {
-			backgroundColor: theme.palette.primary.main,
+			//backgroundColor: theme.palette.primary.main,
 			'& .MuiListItemIcon-root, & .MuiListItemText-primary': {
-				color: theme.palette.common.white,
+				//color: theme.palette.common.white,
 			},
 		},
 	},
@@ -75,9 +77,9 @@ const useStyles = makeStyles((theme: Theme) =>
 		expand: {
 			transform: 'rotate(0deg)',
 			marginLeft: 'auto',
-			transition: theme.transitions.create('transform', {
-				duration: theme.transitions.duration.shortest,
-			}),
+			//transition: theme.transitions.create('transform', {
+			//	duration: theme.transitions.duration.shortest,
+			//}),
 		},
 		expandOpen: {
 			transform: 'rotate(180deg)',
@@ -155,6 +157,7 @@ export default function Task({
 							aria-label="settings"
 							aria-controls="customized-menu"
 							aria-haspopup="true"
+							size="large"
 						>
 							<MoreVertIcon />
 						</IconButton>
@@ -199,10 +202,10 @@ export default function Task({
 			</CardContent>
 			{actionFeature && (
 				<CardActions disableSpacing>
-					<IconButton aria-label="add to favorites">
+					<IconButton aria-label="add to favorites" size="large">
 						<FavoriteIcon />
 					</IconButton>
-					<IconButton aria-label="share">
+					<IconButton aria-label="share" size="large">
 						<ShareIcon />
 					</IconButton>
 					<IconButton
@@ -212,6 +215,7 @@ export default function Task({
 						onClick={handleExpandClick}
 						aria-expanded={expanded}
 						aria-label="show more"
+						size="large"
 					>
 						<ExpandMoreIcon />
 					</IconButton>

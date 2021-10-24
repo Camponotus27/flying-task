@@ -9,7 +9,7 @@ import {
 	setTaskEdit,
 } from '../../application/components/task/SliceTask';
 
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 
 function PageTask({
@@ -27,6 +27,10 @@ function PageTask({
 		fetchTaskAsync();
 	}, []);
 
+	const handleHomeClick = () => {
+		router.push('/');
+	};
+
 	const handleCreateClick = () => {
 		setTaskEdit(undefined);
 		router.push('task/create');
@@ -36,6 +40,14 @@ function PageTask({
 
 	return (
 		<Layout>
+			<Button
+				variant="contained"
+				color="primary"
+				onClick={handleHomeClick}
+				style={{ margin: 20 }}
+			>
+				Menu
+			</Button>
 			<Button
 				variant="contained"
 				color="primary"

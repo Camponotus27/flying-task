@@ -1,11 +1,11 @@
 import { useFormik, FormikProvider } from 'formik';
 import * as yup from 'yup';
 import { connect, ConnectedProps } from 'react-redux';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import Layout from '../../../application/components/layouts/Layout';
-import TextField from '@material-ui/core/TextField';
+import TextField from '@mui/material/TextField';
 import TinyMCE from '../../../application/components/common/text-editor-component/TinyMCE';
-import Typography from '@material-ui/core/Typography';
+import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import { IRootState } from './../../../redux/store';
 import {

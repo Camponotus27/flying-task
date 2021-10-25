@@ -8,26 +8,14 @@ import * as yup from 'yup';
 // material UI
 import TextField from '@mui/material/TextField';
 import CircularProgress from '@mui/material/CircularProgress';
-import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
-import FolderIcon from '@mui/icons-material/Folder';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckIcon from '@mui/icons-material/Check';
-import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
-
-import { useRouter } from 'next/router';
 
 interface Props {
 	word: WordModel;
@@ -150,8 +138,9 @@ export default function WordItemList({
 				>
 					<ListItemText
 						primary={
-							<>
-								{ifEditing ? (
+							ifEditing ? (
+								<>
+									{' '}
 									<TextField
 										variant="outlined"
 										size="small"
@@ -161,36 +150,55 @@ export default function WordItemList({
 										error={formik.touched.word && Boolean(formik.errors.word)}
 										helperText={formik.touched.word && formik.errors.word}
 									/>
-								) : (
-									<div>
-										<Typography variant="h5" component="h5">
-											{word.word}
-										</Typography>
-									</div>
-								)}
-								<div style={{ marginTop: 20 }}>
-									{ifEditing ? (
-										<TextField
-											variant="outlined"
-											size="small"
-											name="pronunciation"
-											value={formik.values.pronunciation}
-											onChange={formik.handleChange}
-											error={
-												formik.touched.pronunciation &&
-												Boolean(formik.errors.pronunciation)
-											}
-											helperText={
-												formik.touched.pronunciation && formik.errors.word
-											}
-										/>
-									) : (
-										<div>
-											<Typography>{word.pronunciation}</Typography>
-										</div>
-									)}
+									<TextField
+										variant="outlined"
+										size="small"
+										name="pronunciation"
+										value={formik.values.pronunciation}
+										onChange={formik.handleChange}
+										error={
+											formik.touched.pronunciation &&
+											Boolean(formik.errors.pronunciation)
+										}
+										helperText={
+											formik.touched.pronunciation &&
+											formik.errors.pronunciation
+										}
+									/>
+									<TextField
+										variant="outlined"
+										size="small"
+										name="significance"
+										value={formik.values.significance}
+										onChange={formik.handleChange}
+										error={
+											formik.touched.significance &&
+											Boolean(formik.errors.significance)
+										}
+										helperText={
+											formik.touched.significance && formik.errors.significance
+										}
+									/>
+									<TextField
+										variant="outlined"
+										size="small"
+										name="note"
+										value={formik.values.note}
+										onChange={formik.handleChange}
+										error={formik.touched.note && Boolean(formik.errors.note)}
+										helperText={formik.touched.note && formik.errors.note}
+									/>
+								</>
+							) : (
+								<div>
+									<Typography variant="h5" component="h5">
+										{word.word}
+									</Typography>
+									<Typography>{word.pronunciation}</Typography>
+									<Typography>{word.significance}</Typography>
+									<Typography>{word.note}</Typography>
 								</div>
-							</>
+							)
 						}
 					/>
 				</ListItem>

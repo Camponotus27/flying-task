@@ -3,6 +3,7 @@ import { IResponse, IWordEntity, IResponseList } from './interfaces';
 import {
 	mapWordEntityListToWordModelList,
 	mapWordEntityToWordModel,
+	mapWordModelToIWordEntity,
 } from './mappers';
 import WordModel from '../../../../../domain/WordModel';
 
@@ -20,10 +21,10 @@ export async function fetchWords(): Promise<WordModel[]> {
 	return mapWordEntityListToWordModelList(dataResposnse.data.data);
 }
 
-export async function createWord(word: IWordEntity): Promise<WordModel> {
+export async function createWord(modelWord: WordModel): Promise<WordModel> {
 	const res = await axios.post<IResponse>(
 		`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/english-dictionary`,
-		word
+		mapWordModelToIWordEntity(modelWord)
 	);
 
 	const dataResposnse = res.data;
@@ -36,7 +37,8 @@ export async function createWord(word: IWordEntity): Promise<WordModel> {
 	return mapWordEntityToWordModel(dataResposnse.data);
 }
 
-export async function updateWord(word: IWordEntity): Promise<WordModel> {
+export async function updateWord(modelWord: WordModel): Promise<WordModel> {
+	let word = mapWordModelToIWordEntity(modelWord);
 	if (!word.id) {
 		return new Promise((resolve, reject) => {
 			reject('custom error: ' + 'para actualizar se necesita una id');

@@ -61,9 +61,10 @@ function PageWord({
 				disabled={creatingState.isLoading}
 				onClick={handleCreateClick}
 				sx={{
-					position: 'absolute',
+					position: 'fixed',
 					bottom: 16,
 					right: 16,
+					zIndex: 10,
 				}}
 				color="primary"
 				aria-label="add"

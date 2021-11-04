@@ -2,12 +2,20 @@ import WordModel, { asyncState } from '../../../../../domain/WordModel';
 import { IWordEntity } from './interfaces';
 
 export function mapWordModelToIWordEntity(word_model: WordModel): IWordEntity {
-	const { id, word, pronunciation, significance, note } = word_model;
-	return { id, word, pronunciation, significance, note };
+	const { id, word, pronunciation, significance, note, updatedAt } = word_model;
+	return {
+		id,
+		word,
+		pronunciation,
+		significance,
+		note,
+		updated_at: new Date(updatedAt).toString(),
+	};
 }
 
 export function mapWordEntityToWordModel(word_entity: IWordEntity): WordModel {
-	const { id, word, pronunciation, significance, note } = word_entity;
+	const { id, word, pronunciation, significance, note, updated_at } =
+		word_entity;
 
 	const defaultAsyncState: asyncState = {
 		isLoading: false,
@@ -20,6 +28,7 @@ export function mapWordEntityToWordModel(word_entity: IWordEntity): WordModel {
 		pronunciation,
 		significance,
 		note,
+		updatedAt: new Date(updated_at).getTime(),
 		asyncStateUpdate: defaultAsyncState,
 		asyncStateDelete: defaultAsyncState,
 	};

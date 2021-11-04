@@ -24,4 +24,5 @@ export interface IWordEntity {
 	pronunciation: string;
 	significance: string;
 	note: string;
+	updated_at: string;
 }

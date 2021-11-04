@@ -74,7 +74,10 @@ export const wordSlice = createSlice({
 					isError: false,
 					isLoading: false,
 				};
-				state.words = action.payload;
+				state.words = action.payload.sort((a, b) => {
+					if (!a.updatedAt || !b.updatedAt) return 0;
+					return b.updatedAt - a.updatedAt;
+				});
 			})
 			.addCase(fetchWordAsync.rejected, (state, action) => {
 				state.feching = {
@@ -94,7 +97,11 @@ export const wordSlice = createSlice({
 					isError: false,
 					isLoading: false,
 				};
-				state.words = [...state.words, action.payload];
+				state.words = [...state.words, action.payload].sort((a, b) => {
+					if (!a.updatedAt || !b.updatedAt) return 0;
+
+					return b.updatedAt - a.updatedAt;
+				});
 			})
 			.addCase(createWordAsync.rejected, (state, action) => {
 				state.creating = {
@@ -146,19 +153,25 @@ export const wordSlice = createSlice({
 				});
 			})
 			.addCase(updateWordAsync.fulfilled, (state, action) => {
-				state.words = state.words.map((word) => {
-					if (word.id === action.payload.id) {
-						return {
-							...action.payload,
-							asyncStateUpdate: {
-								...word.asyncStateUpdate,
-								isLoading: false,
-							},
-						};
-					} else {
-						return word;
-					}
-				});
+				state.words = state.words
+					.map((word) => {
+						if (word.id === action.payload.id) {
+							return {
+								...action.payload,
+								asyncStateUpdate: {
+									...word.asyncStateUpdate,
+									isLoading: false,
+								},
+							};
+						} else {
+							return word;
+						}
+					})
+					.sort((a, b) => {
+						if (!a.updatedAt || !b.updatedAt) return 0;
+
+						return b.updatedAt - a.updatedAt;
+					});
 			})
 			.addCase(updateWordAsync.rejected, (state, action) => {
 				state.words = state.words.map((word) => {

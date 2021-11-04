@@ -9,7 +9,7 @@ export default interface TaskModel {
 	pronunciation: string;
 	significance: string;
 	note: string;
-	updatedAt: number;
+	updatedAt?: number;
 	asyncStateUpdate: asyncState;
 	asyncStateDelete: asyncState;
 }

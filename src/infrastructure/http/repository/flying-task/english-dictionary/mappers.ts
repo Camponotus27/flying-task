@@ -3,13 +3,14 @@ import { IWordEntity } from './interfaces';
 
 export function mapWordModelToIWordEntity(word_model: WordModel): IWordEntity {
 	const { id, word, pronunciation, significance, note, updatedAt } = word_model;
+
 	return {
 		id,
 		word,
 		pronunciation,
 		significance,
 		note,
-		updated_at: new Date(updatedAt).toString(),
+		updated_at: updatedAt ? new Date(updatedAt).toString() : undefined,
 	};
 }
 
@@ -28,7 +29,7 @@ export function mapWordEntityToWordModel(word_entity: IWordEntity): WordModel {
 		pronunciation,
 		significance,
 		note,
-		updatedAt: new Date(updated_at).getTime(),
+		updatedAt: updated_at ? new Date(updated_at).getTime() : undefined,
 		asyncStateUpdate: defaultAsyncState,
 		asyncStateDelete: defaultAsyncState,
 	};

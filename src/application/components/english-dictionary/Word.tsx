@@ -16,6 +16,8 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import CancelIcon from '@mui/icons-material/Cancel';
 import CheckIcon from '@mui/icons-material/Check';
+import { padding, style } from '@mui/system';
+import Paper from '@mui/material/Paper';
 
 interface Props {
 	word: WordModel;
@@ -25,7 +27,7 @@ interface Props {
 }
 
 const validationSchema = yup.object({
-	word: yup.string(),
+	word: yup.string().required('Word is required'),
 	pronunciation: yup.string(),
 	significance: yup.string(),
 	note: yup.string(),
@@ -71,6 +73,7 @@ export default function WordItemList({
 	const handlerClickDelete = () => {
 		if (confirmDelete) {
 			deleteWord();
+			setConfirmDelete(false);
 		} else {
 			setConfirmDelete(true);
 		}
@@ -81,129 +84,154 @@ export default function WordItemList({
 			//TODO: Crear notificacion  y mandar este err
 			console.log('La word no tiene id', word);
 		} else {
-			handleClose();
+			handlerClose();
 			deleteWordAsync(word.id);
 		}
 	};
 
-	const handleClose = () => {
+	const handlerClose = () => {
 		setConfirmDelete(false);
 	};
 
+	const handlerClickCancel = () => {
+		formik.resetForm();
+		setIfEditing(false);
+	};
+
+	const handlerMouseLeaveDelete = () => {
+		setConfirmDelete(false);
+	};
+
+	const handlerOnClickPaper = () => ifEditing === false && setIfEditing(true);
+
+	const inputPropsDefault = {
+		style: {
+			padding: '0 0.5em',
+		},
+	};
+
 	return (
-		<FormikProvider value={formik}>
-			<form onSubmit={formik.handleSubmit}>
-				<ListItem
-					secondaryAction={
-						word.asyncStateUpdate.isLoading ||
-						word.asyncStateDelete.isLoading ? (
-							<CircularProgress />
-						) : ifEditing ? (
-							<>
-								<IconButton
-									edge="end"
-									aria-label="cancel"
-									onClick={() => setIfEditing(false)}
-								>
-									<CancelIcon />
-								</IconButton>
-								<IconButton
-									edge="end"
-									aria-label="check"
-									onClick={() => formik.submitForm()}
-								>
-									<CheckIcon />
-								</IconButton>
-							</>
-						) : (
-							<>
-								<IconButton
-									edge="end"
-									aria-label="edit"
-									onClick={() => setIfEditing(true)}
-								>
-									<EditIcon />
-								</IconButton>
-								<IconButton
-									onClick={handlerClickDelete}
-									edge="end"
-									aria-label="delete"
-								>
-									<DeleteIcon />
-									{confirmDelete && '?'}
-								</IconButton>
-							</>
-						)
-					}
-				>
-					<ListItemText
-						primary={
-							ifEditing ? (
+		<Paper>
+			<FormikProvider value={formik}>
+				<form onSubmit={formik.handleSubmit}>
+					<ListItem
+						secondaryAction={
+							word.asyncStateUpdate.isLoading ||
+							word.asyncStateDelete.isLoading ? (
+								<CircularProgress />
+							) : ifEditing ? (
 								<>
-									{' '}
-									<TextField
-										variant="outlined"
-										size="small"
-										name="word"
-										value={formik.values.word}
-										onChange={formik.handleChange}
-										error={formik.touched.word && Boolean(formik.errors.word)}
-										helperText={formik.touched.word && formik.errors.word}
-									/>
-									<TextField
-										variant="outlined"
-										size="small"
-										name="pronunciation"
-										value={formik.values.pronunciation}
-										onChange={formik.handleChange}
-										error={
-											formik.touched.pronunciation &&
-											Boolean(formik.errors.pronunciation)
-										}
-										helperText={
-											formik.touched.pronunciation &&
-											formik.errors.pronunciation
-										}
-									/>
-									<TextField
-										variant="outlined"
-										size="small"
-										name="significance"
-										value={formik.values.significance}
-										onChange={formik.handleChange}
-										error={
-											formik.touched.significance &&
-											Boolean(formik.errors.significance)
-										}
-										helperText={
-											formik.touched.significance && formik.errors.significance
-										}
-									/>
-									<TextField
-										variant="outlined"
-										size="small"
-										name="note"
-										value={formik.values.note}
-										onChange={formik.handleChange}
-										error={formik.touched.note && Boolean(formik.errors.note)}
-										helperText={formik.touched.note && formik.errors.note}
-									/>
+									<IconButton
+										edge="end"
+										aria-label="cancel"
+										onClick={handlerClickCancel}
+									>
+										<CancelIcon color="error" />
+									</IconButton>
+									<IconButton
+										edge="end"
+										aria-label="check"
+										onClick={() => formik.submitForm()}
+									>
+										<CheckIcon color="success" />
+									</IconButton>
 								</>
 							) : (
-								<div>
-									<Typography variant="h5" component="h5">
-										{word.word}
-									</Typography>
-									<Typography>{word.pronunciation}</Typography>
-									<Typography>{word.significance}</Typography>
-									<Typography>{word.note}</Typography>
-								</div>
+								<>
+									<IconButton
+										onClick={handlerClickDelete}
+										onMouseLeave={() => handlerMouseLeaveDelete()}
+										edge="end"
+										aria-label="delete"
+									>
+										<DeleteIcon color={confirmDelete ? 'error' : 'warning'} />
+										{confirmDelete && (
+											<Typography variant="h4" color="error">
+												?
+											</Typography>
+										)}
+									</IconButton>
+								</>
 							)
 						}
-					/>
-				</ListItem>
-				<ListItem></ListItem>
-			</form>
-		</FormikProvider>
+					>
+						<ListItemText
+							onClick={handlerOnClickPaper}
+							primary={
+								ifEditing ? (
+									<>
+										<TextField
+											variant="standard"
+											size="small"
+											name="word"
+											placeholder="Word"
+											InputProps={inputPropsDefault}
+											value={formik.values.word}
+											onChange={formik.handleChange}
+											error={formik.touched.word && Boolean(formik.errors.word)}
+											helperText={formik.touched.word && formik.errors.word}
+										/>
+										<TextField
+											variant="standard"
+											size="small"
+											name="pronunciation"
+											placeholder="Pronunciation"
+											InputProps={inputPropsDefault}
+											value={formik.values.pronunciation}
+											onChange={formik.handleChange}
+											error={
+												formik.touched.pronunciation &&
+												Boolean(formik.errors.pronunciation)
+											}
+											helperText={
+												formik.touched.pronunciation &&
+												formik.errors.pronunciation
+											}
+										/>
+										<TextField
+											variant="standard"
+											size="small"
+											name="significance"
+											placeholder="Significance"
+											value={formik.values.significance}
+											InputProps={inputPropsDefault}
+											onChange={formik.handleChange}
+											error={
+												formik.touched.significance &&
+												Boolean(formik.errors.significance)
+											}
+											helperText={
+												formik.touched.significance &&
+												formik.errors.significance
+											}
+										/>
+										<TextField
+											variant="standard"
+											size="small"
+											name="note"
+											placeholder="Note"
+											InputProps={inputPropsDefault}
+											value={formik.values.note}
+											onChange={formik.handleChange}
+											error={formik.touched.note && Boolean(formik.errors.note)}
+											helperText={formik.touched.note && formik.errors.note}
+										/>
+									</>
+								) : (
+									<div>
+										<Typography variant="h5" component="h5">
+											{word.word}
+										</Typography>
+										<Typography>{word.pronunciation || '-'}</Typography>
+										<Typography>{word.significance || '-'}</Typography>
+										<Typography>{word.note}</Typography>
+									</div>
+								)
+							}
+						/>
+					</ListItem>
+				</form>
+			</FormikProvider>
+		</Paper>
 	);
 }

@@ -4,6 +4,8 @@ import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 import { Provider } from 'react-redux';
 import store from './../redux/store';
+import ThemeProvider from './../application/components//common/ThemeProvider';
+
 type NextPageWithLayout = NextPage & {
 	getLayout?: (page: ReactElement) => ReactNode;
 };
@@ -18,7 +20,9 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
 
 	return getLayout(
 		<Provider store={store}>
-			<Component {...pageProps} />
+			<ThemeProvider>
+				<Component {...pageProps} />
+			</ThemeProvider>
 		</Provider>
 	);
 }

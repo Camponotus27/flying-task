@@ -1,7 +1,13 @@
+import { useState } from 'react';
 import WordItemList from './Word';
+
+import TextField from '@material-ui/core/TextField';
 import Typography from '@mui/material/Typography';
 import Grid from '@mui/material/Grid';
 import List from '@mui/material/List';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import ClearIcon from '@mui/icons-material/Clear';
 import {
 	DefaultMessageErrorListWord,
 	DefaultMessageLoadingListWord,
@@ -16,7 +22,23 @@ export default function ListWord({
 	deleteWordAsync,
 	updateWordAsync,
 	createWordAsync,
+	fetchWordAsync,
 }: IListWordProps) {
+	const [search, setSearch] = useState('');
+
+	const handlerSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+		e.preventDefault();
+		fetchWordAsync(search);
+	};
+	const handlerChangeSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearch(e.target.value);
+	};
+
+	const handlerCancelSearch = () => {
+		setSearch('');
+		fetchWordAsync();
+	};
+
 	let body: JSX.Element | JSX.Element[] = (
 		<Grid item>
 			<h1>{DefaultMessageEmptyListWord}</h1>
@@ -53,9 +75,34 @@ export default function ListWord({
 
 	return (
 		<>
-			<Typography variant="h2" style={{ margin: 20 }}>
+			<Typography variant="h2" style={{ textAlign: 'center' }}>
 				English Dictionary
 			</Typography>
+			<div style={{ padding: '0 15px' }}>
+				<form onSubmit={handlerSubmit}>
+					<TextField
+						fullWidth
+						id="search"
+						name="search"
+						label="Buscar..."
+						value={search}
+						onChange={handlerChangeSearch}
+						InputProps={{
+							endAdornment: search && (
+								<InputAdornment position="end">
+									<IconButton
+										edge="end"
+										color="error"
+										onClick={handlerCancelSearch}
+									>
+										<ClearIcon />
+									</IconButton>
+								</InputAdornment>
+							),
+						}}
+					/>
+				</form>
+			</div>
 			<Grid container spacing={3}>
 				{body}
 			</Grid>

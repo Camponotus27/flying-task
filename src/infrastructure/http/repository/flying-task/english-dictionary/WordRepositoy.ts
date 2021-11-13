@@ -7,9 +7,12 @@ import {
 } from './mappers';
 import WordModel from '../../../../../domain/WordModel';
 
-export async function fetchWords(): Promise<WordModel[]> {
+export async function fetchWords(search?: string): Promise<WordModel[]> {
 	const res = await axios.get<IResponseList>(
-		`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/english-dictionary`
+		`${process.env.NEXT_PUBLIC_BACKEND_HOST}/api/english-dictionary`,
+		{
+			params: { search: search || '' },
+		}
 	);
 
 	const dataResposnse = res.data;

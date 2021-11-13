@@ -75,6 +75,7 @@ function PageWord({
 				words={words}
 				isLoading={fechingState.isLoading}
 				isError={fechingState.isError}
+				fetchWordAsync={fetchWordAsync}
 				deleteWordAsync={deleteWordAsync}
 				updateWordAsync={updateWordAsync}
 				createWordAsync={createWordAsync}

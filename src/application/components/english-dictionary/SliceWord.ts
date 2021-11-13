@@ -33,7 +33,7 @@ const initialState: IWordState = {
 
 export const fetchWordAsync = createAsyncThunk(
 	'words/fetchWords',
-	async (): Promise<WordModel[]> => await fetchWords()
+	async (search?: string): Promise<WordModel[]> => await fetchWords(search)
 );
 
 export const createWordAsync = createAsyncThunk(

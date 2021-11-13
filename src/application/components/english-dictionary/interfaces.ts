@@ -7,4 +7,5 @@ export interface IListWordProps {
 	deleteWordAsync(idWord: number): void;
 	createWordAsync(word: WordModel): void;
 	updateWordAsync(word: WordModel): void;
+	fetchWordAsync(search?: string): void;
 }

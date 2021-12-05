@@ -1,3 +1,7 @@
+/// <reference lib="webworker" />
+//@ts-ignore
+declare var self: ServiceWorkerGlobalScope;
+
 export const createScheduledNotification = async (
 	tag: string,
 	title: string,
@@ -24,7 +28,21 @@ export const createScheduledNotification = async (
 			],
 		};
 
+		/*
+		// other form the use notifications
+		let notification = new Notification(title);
+		notification.onclick = function (event) {
+			event.preventDefault(); // evitar que el navegador enfoque la pestaña de notificaciones
+			window.open('http://www.mozilla.org', '_blank');
+		};*/
 		registration.showNotification(title, options);
+
+		navigator.serviceWorker.addEventListener(
+			'notificationclick',
+			function (event) {
+				console.log('Notification click: tag');
+			}
+		);
 	}
 };
 
@@ -40,12 +58,25 @@ const statusPermissionNotifications = (): boolean => {
 export const addEventListenerNotifications = async (): Promise<void> => {
 	console.log('addEventListenerNotifications');
 
-	const registration = await navigator.serviceWorker.getRegistration();
-	if (registration) {
-		registration.addEventListener('notificationclick', (event) => {
-			console.log('Notification click: tag ', event.target);
-		});
+	if ('actions' in Notification.prototype) {
+		// Action buttons are supported.
+		console.log('Actions buttons are supported');
 	} else {
-		console.log('registration is null');
+		// Action buttons are NOT supported.
+		console.log('Actions buttons are NOT supported');
 	}
+
+	self.addEventListener('push', function (event) {
+		if (event.data) {
+			console.log('This push event has data: ', event.data.text());
+		} else {
+			console.log('This push event has no data.');
+		}
+	});
+
+	self.onnotificationclick = (event) => {
+		event.waitUntil(() =>
+			console.log('Notification click: tag ', event.target)
+		);
+	};
 };

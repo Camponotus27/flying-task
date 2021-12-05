@@ -28,7 +28,7 @@ export const createScheduledNotification = async (
 	}
 };
 
-const requestPermissionNotifications = async (): Promise<boolean> => {
+export const requestPermissionNotifications = async (): Promise<boolean> => {
 	Notification.requestPermission();
 	return statusPermissionNotifications();
 };

@@ -6,7 +6,8 @@ module.exports = withPWA({
 		register: true,
 		sw: 'service-worker.js',
 		dest: 'public',
-		runtimeCaching,
+		//runtimeCaching,
+		importScripts: ['./sw-notifications.js'],
 	},
 	webpack: function (config) {
 		config.experiments = {};

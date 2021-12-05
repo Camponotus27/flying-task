@@ -18,7 +18,8 @@
 		"next-env.d.ts",
 		"**/*.ts",
 		"**/*.tsx",
-		"src/application/components/common/text-editor-component/TinyMCE.tsx"
+		"src/application/components/common/text-editor-component/TinyMCE.tsx",
+		"public/test.js"
 	],
 	"exclude": ["node_modules"]
 }

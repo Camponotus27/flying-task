@@ -4,8 +4,7 @@ import Layout from '../application/components/layouts/Layout';
 
 import {
 	createScheduledNotification,
-	addEventListenerNotifications,
-	requestPermissionNotifications,
+	requestPermissionNotificationsIfDeviceDoNotHave,
 } from './../lib/notifications/local/local-notifications';
 
 // Mui
@@ -15,8 +14,7 @@ export default function Home() {
 	const router = useRouter();
 
 	useEffect(() => {
-		requestPermissionNotifications();
-		addEventListenerNotifications();
+		requestPermissionNotificationsIfDeviceDoNotHave();
 	}, []);
 
 	const handleEnglishDictionaryClick = () => {

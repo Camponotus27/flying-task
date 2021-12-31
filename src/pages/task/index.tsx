@@ -27,35 +27,8 @@ function PageTask({
 		fetchTaskAsync();
 	}, []);
 
-	const handleHomeClick = () => {
-		router.push('/');
-	};
-
-	const handleCreateClick = () => {
-		setTaskEdit(undefined);
-		router.push('task/create');
-	};
-
-	const handleDeleteClick = () => {};
-
 	return (
 		<Layout>
-			<Button
-				variant="contained"
-				color="primary"
-				onClick={handleHomeClick}
-				style={{ margin: 20 }}
-			>
-				Menu
-			</Button>
-			<Button
-				variant="contained"
-				color="primary"
-				onClick={handleCreateClick}
-				style={{ margin: 20 }}
-			>
-				Crear
-			</Button>
 			<ListTask
 				tasks={tasks}
 				isLoading={isLoading}

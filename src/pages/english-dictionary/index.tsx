@@ -32,10 +32,6 @@ function PageWord({
 		fetchWordAsync();
 	}, []);
 
-	const handleHomeClick = () => {
-		router.push('/');
-	};
-
 	const handleCreateClick = () => {
 		createWordAsync({
 			word: 'new word',
@@ -49,20 +45,12 @@ function PageWord({
 
 	return (
 		<Layout>
-			<Button
-				variant="contained"
-				color="primary"
-				onClick={handleHomeClick}
-				style={{ margin: 20 }}
-			>
-				Menu
-			</Button>
 			<Fab
 				disabled={creatingState.isLoading}
 				onClick={handleCreateClick}
 				sx={{
 					position: 'fixed',
-					bottom: 16,
+					bottom: 66,
 					right: 16,
 					zIndex: 10,
 				}}

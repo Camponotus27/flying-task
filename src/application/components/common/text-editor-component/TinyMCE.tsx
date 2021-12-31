@@ -9,7 +9,7 @@ interface PropTextEditor {
 	label: string;
 }
 
-export default function TinyMCE2({ ...props }: any) {
+export default function TinyMCE({ ...props }: any) {
 	const [initialValue, setInitialValue] = useState('');
 
 	const editorRef: any = useRef({});

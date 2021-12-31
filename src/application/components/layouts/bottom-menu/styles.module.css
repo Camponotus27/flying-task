@@ -1,0 +1,13 @@
+.navigation {
+	max-width: 800px;
+	flex-grow: 1;
+}
+
+.container {
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	margin: auto;
+	width: 100vw;
+	bottom: 0;
+}

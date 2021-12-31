@@ -1,0 +1,17 @@
+.container {
+}
+.containerHeader {
+	width: 100vw;
+	height: 50px;
+	position: fixed;
+	top: 0;
+	z-index: 10;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: white;
+}
+
+.heightHeader {
+	height: 56px;
+}

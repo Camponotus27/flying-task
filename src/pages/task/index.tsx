@@ -1,65 +1,74 @@
-import ListTask from '../../application/components/task/ListTask';
 import { useEffect } from 'react';
-import { connect, ConnectedProps } from 'react-redux';
 import Layout from '../../application/components/layouts/Layout';
-import { IRootState } from './../../redux/store';
-import {
-	fetchTaskAsync,
-	deleteTaskAsync,
-	setTaskEdit,
-} from '../../application/components/task/SliceTask';
-
-import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 
-function PageTask({
-	tasks,
-	isLoading,
-	isError,
-	fetchTaskAsync,
-	deletingState,
-	deleteTaskAsync,
-	setTaskEdit,
-}: PropsFromRedux) {
+const data = [
+	{
+		Canal: 1,
+		Temperatura: 20,
+		PH: 20,
+		PorcentajeHumerdad: 30,
+		disponible: true,
+	},
+	{
+		Canal: 3,
+		Temperatura: 40,
+		PH: 20,
+		PorcentajeHumerdad: 1,
+		disponible: false,
+	},
+	{
+		Canal: 5,
+		Temperatura: 70,
+		PH: 20,
+		PorcentajeHumerdad: 40,
+		disponible: true,
+	},
+	{
+		Canal: 6,
+		Temperatura: 50,
+		PH: 20,
+		PorcentajeHumerdad: 50,
+		disponible: true,
+	},
+	{
+		Canal: 7,
+		Temperatura: 2,
+		PH: 20,
+		PorcentajeHumerdad: 70,
+		disponible: false,
+	},
+];
+
+function PageTask({}) {
 	const router = useRouter();
-
-	useEffect(() => {
-		fetchTaskAsync();
-	}, []);
-
 	return (
 		<Layout>
-			<ListTask
-				tasks={tasks}
-				isLoading={isLoading}
-				isError={isError}
-				deleteTaskAsync={deleteTaskAsync}
-				deletingState={deletingState}
-				setTaskEdit={setTaskEdit}
-			/>
+			{data.map((d) => {
+				return (
+					<div
+						onClick={() => {
+							alert('Ejecutar Canal ' + d.Canal);
+						}}
+						key={d.Canal}
+						className="sebas-clase"
+					>
+						<h1>
+							Canal {d.Canal}{' '}
+							<span
+								style={{ color: 'red', fontSize: 20, verticalAlign: 'center' }}
+							>
+								{!d.disponible || 'Canal no disponible'}
+							</span>
+						</h1>
+						<div>Terperatura: {d.Temperatura}º</div>
+						<div>PH: {d.PH} </div>
+						<div>Porcentaje Humerdad: {d.PorcentajeHumerdad}%</div>
+					</div>
+				);
+			})}
 		</Layout>
 	);
 }
 
-const mapStateToProps = (state: IRootState) => {
-	const taskState = state.tasks;
-
-	const { isLoading, isError } = taskState.feching;
-
-	return {
-		tasks: taskState.tasks,
-		isLoading,
-		isError,
-		deletingState: taskState.deleting,
-	};
-};
-
-const mapDispatchToProps = {
-	setTaskEdit,
-	fetchTaskAsync,
-	deleteTaskAsync,
-};
-
-const conn = connect(mapStateToProps, mapDispatchToProps);
-type PropsFromRedux = ConnectedProps<typeof conn>;
-export default conn(PageTask);
+export default PageTask;

@@ -28,7 +28,7 @@ export const createScheduledNotification = async (
 			],
 		};
 
-		registration.showNotification(title, options);
+		await registration.showNotification(title, options);
 	}
 };
 

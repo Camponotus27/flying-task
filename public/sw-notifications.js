@@ -1,3 +1,5 @@
+import { createScheduledNotification } from './../src/lib/notifications/local/local-notifications.js';
+
 self.addEventListener('notificationclick', function (event) {
 	const clickedNotification = event.notification;
 	clickedNotification.close();
@@ -24,5 +26,11 @@ self.addEventListener('notificationclick', function (event) {
 		default:
 			console.log(`Unknown action clicked: '${event.action}'`);
 			break;
+	}
+});
+
+self.addEventListener('periodicsync', (event) => {
+	if (event.tag == 'get-english-dictionary') {
+		event.waitUntil(createScheduledNotification());
 	}
 });
